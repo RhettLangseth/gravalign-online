@@ -7,11 +7,4 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/api/v1/puzzles")
 public class PuzzleController {
 
-//    private final PuzzleService puzzleService;
-//    private final PuzzleMapper puzzleMapper;
-//
-//    public PuzzleController(PuzzleService puzzleService, TaskMapper taskMapper) {
-//
-//    }
-
 }

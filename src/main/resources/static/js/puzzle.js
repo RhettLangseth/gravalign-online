@@ -10,7 +10,7 @@ function renderBoard(boardState) {
         const column = document.createElement("button");
         column.classList.add("column");
         column.type = "button";
-        column.dataset.column = columnIndex;
+        column.dataset.column = (columnIndex + 1).toString();
 
         for (let rowIndex = 5; rowIndex >= 0; rowIndex--) {
             const cell = document.createElement("span");
@@ -31,7 +31,7 @@ function renderBoard(boardState) {
         }
 
         column.addEventListener("click", () => {
-            const displayedColumn = Number(column.dataset.column) + 1;
+            const displayedColumn = Number(column.dataset.column);
             moveStatus.textContent = `Selected column ${displayedColumn}`;
         });
 
