@@ -1,7 +1,9 @@
 package io.github.rhettlangseth.gravalignonline.puzzle.service.impl;
 
 import io.github.rhettlangseth.gravalignonline.puzzle.domain.entity.Puzzle;
+import io.github.rhettlangseth.gravalignonline.puzzle.domain.model.NextPuzzle;
 import io.github.rhettlangseth.gravalignonline.puzzle.domain.model.PuzzleAttemptResult;
+import io.github.rhettlangseth.gravalignonline.puzzle.exception.PuzzleNotFoundException;
 import io.github.rhettlangseth.gravalignonline.puzzle.service.PuzzleService;
 import org.springframework.stereotype.Service;
 import java.util.UUID;
@@ -14,14 +16,18 @@ public class PuzzleServiceImpl implements PuzzleService {
     }
 
     @Override
-    public Puzzle getNextPuzzle() {
+    public NextPuzzle getNextPuzzle() {
 
-        return new Puzzle(
-                UUID.fromString("00000000-0000-0000-0000-000000000001"),
-                "000000000000120000000000120000000000000000",
-                1,
-                3,
-                900);
+        return new NextPuzzle(
+                new Puzzle(
+                        UUID.fromString("00000000-0000-0000-0000-000000000001"),
+                        "000000000000120000000000120000000000000000",
+                        1,
+                        3,
+                        900
+                ),
+                1200
+        );
 
     }
 
@@ -34,11 +40,18 @@ public class PuzzleServiceImpl implements PuzzleService {
     @Override
     public PuzzleAttemptResult submitAttempt(UUID puzzleId, int column) {
 
-        Puzzle puzzle = getNextPuzzle();
+        NextPuzzle nextPuzzle = getNextPuzzle();
+        Puzzle puzzle = nextPuzzle.puzzle();
+
+        if (!puzzle.getId().equals(puzzleId)) {
+            throw new PuzzleNotFoundException(puzzleId);
+        }
+
         boolean solved = column == puzzle.getCorrectColumn();
+
         return new PuzzleAttemptResult(
                 solved,
-                puzzleId + (solved ? " is correct!" : " is incorrect."),
+                column + (solved ? " is correct!" : " is incorrect."),
                 1200,
                 calculateNewRating(solved, 1200, puzzle.getRating()),
                 puzzle.getRating(),

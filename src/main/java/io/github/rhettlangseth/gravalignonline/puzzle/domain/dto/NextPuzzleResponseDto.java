@@ -3,9 +3,10 @@ package io.github.rhettlangseth.gravalignonline.puzzle.domain.dto;
 import java.util.UUID;
 
 public record NextPuzzleResponseDto(
-        UUID id,
+        UUID puzzleId,
         String board,
-        int playerToMove
+        int playerToMove,
+        int playerRating
 ) {
 
 }
