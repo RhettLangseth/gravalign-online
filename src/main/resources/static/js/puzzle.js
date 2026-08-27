@@ -1,7 +1,20 @@
-const boardState = "000000100000200000120000000000000000000000";
+let currentPuzzleId = null;
 
 const board = document.querySelector("#board");
 const moveStatus = document.querySelector("#move-status");
+
+async function submitAttempt(column) {
+    const response = await fetch(`/api/v1/puzzles/${currentPuzzleId}/attempts`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ column: column })
+    });
+    const result = await response.json();
+
+    moveStatus.textContent = result.message;
+}
 
 function renderBoard(boardState) {
     board.innerHTML = "";
@@ -32,11 +45,21 @@ function renderBoard(boardState) {
 
         column.addEventListener("click", () => {
             const displayedColumn = Number(column.dataset.column);
-            moveStatus.textContent = `Selected column ${displayedColumn}`;
+
+            submitAttempt(displayedColumn);
         });
 
         board.appendChild(column);
     }
 }
 
-renderBoard(boardState);
+async function loadNextPuzzle() {
+    const response = await fetch("/api/v1/puzzles/next");
+    const puzzle = await response.json();
+
+    currentPuzzleId = puzzle.puzzleId;
+    renderBoard(puzzle.board);
+    moveStatus.textContent = `Player ${puzzle.playerToMove} to move.`;
+}
+
+loadNextPuzzle();

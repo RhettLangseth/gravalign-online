@@ -23,7 +23,7 @@ public class PuzzleServiceImpl implements PuzzleService {
                         UUID.fromString("00000000-0000-0000-0000-000000000001"),
                         "000000000000120000000000120000000000000000",
                         1,
-                        3,
+                        4,
                         900
                 ),
                 1200
