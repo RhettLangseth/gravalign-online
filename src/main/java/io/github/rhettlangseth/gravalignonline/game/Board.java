@@ -109,6 +109,24 @@ public class Board {
 
     }
 
+    public boolean isLegal(int column) {
+
+        if (column < 1 || column > 7) {
+
+            throw new IllegalArgumentException("Move column must be between 1 and 7");
+
+        }
+
+        if (heights[column - 1] == 6) {
+
+            return false;
+
+        }
+
+        return true;
+
+    }
+
     public void takeMove(int column) {
 
         if (column < 1 || column > 7) {
@@ -138,9 +156,9 @@ public class Board {
 
     public void makeMove(int column) {
 
-        if (column < 1 || column > 7) {
+        if (!isLegal(column)) {
 
-            throw new IllegalArgumentException("Move column must be between 1 and 7");
+            throw new IllegalArgumentException("Move column must not be full");
 
         }
 
@@ -149,12 +167,6 @@ public class Board {
     }
 
     private void makeMoveInternal(int column) {
-
-        if (heights[column] == 6) {
-
-            throw new IllegalArgumentException("Move column must not be full");
-
-        }
 
         squares[heights[column]][column] = playerToMove;
         heights[column]++;
