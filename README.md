@@ -2,6 +2,8 @@
 
 Gravalign Online is an in-progress Java and Spring Boot portfolio project built around training puzzles for the classic Four In A Row game.
 
+Each puzzle starts from a pre-generated board position. The player chooses the move they think is best, and the server checks the answer. The game uses column-based gravity, where pieces fall to the lowest open space and the objective is to align four or more pieces horizontally, vertically, or diagonally.
+
 ## Current Status
 
 This project currently has a local Spring Boot application with a simple static frontend and REST API endpoints for requesting and attempting puzzles.
