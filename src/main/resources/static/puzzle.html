@@ -6,15 +6,34 @@
         <link rel="stylesheet" href="/css/styles.css">
     </head>
     <body>
-        <h1>Puzzle</h1>
-        <div class="board" id="board"></div>
-        <p id="move-status">Choose a column.</p>
-        <button id="try-again-button" type="button" hidden>Try Again</button>
-        <button id="next-puzzle-button" type="button" hidden>Next Puzzle</button>
-        <br />
-        <br />
-        <a href="/">Back to Main Menu</a>
+        <header>
+            <h1>Gravalign Online</h1>
+            <a href="/">Main Menu</a>
+        </header>
 
+        <main>
+            <section>
+                <h2>Puzzle</h2>
+
+                <div class="board-area">
+                    <div id="board" class="board"></div>
+                </div>
+
+                <div id="player-to-move">
+                    <span>Player to move:</span>
+                    <span class="piece-marker player-one"></span>
+                </div>
+
+                <div id="move-status">Choose a column.</div>
+
+                <div id="puzzle-actions">
+                    <button id="try-again-button" type="button" hidden>Try Again</button>
+                    <button id="next-puzzle-button" type="button" hidden>Next Puzzle</button>
+                </div>
+            </section>
+        </main>
+
+        <script src="/js/board-renderer.js"></script>
         <script src="/js/puzzle.js"></script>
     </body>
 </html>

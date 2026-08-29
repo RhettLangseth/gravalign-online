@@ -1,12 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Gravalign Online</title>
-    <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-    <h1>Gravalign Online</h1>
-    <a href="/puzzle.html">Start Puzzle</a>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Gravalign Online</title>
+        <link rel="stylesheet" href="/css/styles.css">
+    </head>
+    <body class="home-page">
+        <header>
+            <h1>Gravalign Online</h1>
+        </header>
+
+        <main class="home-main">
+            <section class="home-panel">
+                <h2>Training Puzzles</h2>
+                <p>A puzzle trainer for the classic Four in a Row game.</p>
+                <div id="home-board" class="home-board board" aria-hidden="true"></div>
+                <a class="primary-link" href="/puzzle.html">Start Solving</a>
+                <p class="home-note">Local single-user demo</p>
+            </section>
+        </main>
+
+        <script src="/js/board-renderer.js"></script>
+        <script src="/js/home.js"></script>
+    </body>
 </html>

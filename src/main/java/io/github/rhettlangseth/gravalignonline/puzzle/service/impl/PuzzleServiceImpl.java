@@ -71,7 +71,7 @@ public class PuzzleServiceImpl implements PuzzleService {
         return new PuzzleAttemptResult(
                 solved,
                 board.toPositionString(),
-                column + (solved ? " is correct!" : " is incorrect."),
+                "Column " + column + (solved ? " is correct!" : " is incorrect."),
                 1200,
                 calculateNewRating(solved, 1200, puzzle.getRating()),
                 puzzle.getRating(),

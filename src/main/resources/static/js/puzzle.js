@@ -6,6 +6,7 @@ const board = document.querySelector("#board");
 const moveStatus = document.querySelector("#move-status");
 const tryAgainButton = document.querySelector("#try-again-button");
 const nextPuzzleButton = document.querySelector("#next-puzzle-button");
+const playerToMove = document.querySelector("#player-to-move");
 const loadPuzzleErrorMessage = "Could not load puzzle.";
 
 async function submitAttempt(column) {
@@ -26,54 +27,18 @@ async function submitAttempt(column) {
         });
         const result = await response.json();
 
-        renderBoard(result.board);
+        renderBoard(board, result.board, submitAttempt);
         setBoardEnabled(false);
         moveStatus.textContent = result.message;
 
         tryAgainButton.hidden = false;
         nextPuzzleButton.hidden = !result.solved;
+        playerToMove.hidden = true;
     } catch (error) {
         moveStatus.textContent = "Could not submit attempt. Please try again.";
         setBoardEnabled(true);
     } finally {
         attemptInProgress = false;
-    }
-}
-
-function renderBoard(boardState) {
-    board.innerHTML = "";
-
-    for (let columnIndex = 0; columnIndex < 7; columnIndex++) {
-        const column = document.createElement("button");
-        column.classList.add("column");
-        column.type = "button";
-        column.dataset.column = (columnIndex + 1).toString();
-
-        for (let rowIndex = 5; rowIndex >= 0; rowIndex--) {
-            const cell = document.createElement("span");
-            cell.classList.add("cell");
-
-            const boardIndex = columnIndex * 6 + rowIndex;
-            const cellValue = boardState.charAt(boardIndex);
-
-            if (cellValue === "1") {
-                cell.classList.add("player-one");
-            } else if (cellValue === "2") {
-                cell.classList.add("player-two");
-            } else {
-                cell.classList.add("empty");
-            }
-
-            column.appendChild(cell);
-        }
-
-        column.addEventListener("click", () => {
-            const displayedColumn = Number(column.dataset.column);
-
-            submitAttempt(displayedColumn);
-        });
-
-        board.appendChild(column);
     }
 }
 
@@ -86,10 +51,11 @@ nextPuzzleButton.addEventListener("click", () => {
 });
 
 function resetPuzzle() {
-    renderBoard(startingBoard);
+    renderBoard(board, startingBoard, submitAttempt);
     moveStatus.textContent = "Choose a column.";
     tryAgainButton.hidden = true;
     nextPuzzleButton.hidden = true;
+    playerToMove.hidden = false;
     setBoardEnabled(true);
     attemptInProgress = false;
 }
@@ -100,12 +66,7 @@ async function loadNextPuzzle() {
 
     startingBoard = puzzle.board;
     currentPuzzleId = puzzle.puzzleId;
-    renderBoard(puzzle.board);
-    moveStatus.textContent = `Player ${puzzle.playerToMove} to move.`;
-    tryAgainButton.hidden = true;
-    nextPuzzleButton.hidden = true;
-    setBoardEnabled(true);
-    attemptInProgress = false;
+    resetPuzzle();
 }
 
 function setBoardEnabled(enabled) {
