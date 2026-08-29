@@ -27,6 +27,7 @@ async function submitAttempt(column) {
         const result = await response.json();
 
         renderBoard(result.board);
+        setBoardEnabled(false);
         moveStatus.textContent = result.message;
 
         tryAgainButton.hidden = false;
