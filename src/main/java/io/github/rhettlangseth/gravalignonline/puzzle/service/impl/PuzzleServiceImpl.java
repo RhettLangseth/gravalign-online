@@ -1,5 +1,6 @@
 package io.github.rhettlangseth.gravalignonline.puzzle.service.impl;
 
+import io.github.rhettlangseth.gravalignonline.game.Board;
 import io.github.rhettlangseth.gravalignonline.puzzle.domain.entity.Puzzle;
 import io.github.rhettlangseth.gravalignonline.puzzle.domain.model.NextPuzzle;
 import io.github.rhettlangseth.gravalignonline.puzzle.domain.model.PuzzleAttemptResult;
@@ -44,13 +45,32 @@ public class PuzzleServiceImpl implements PuzzleService {
         Puzzle puzzle = nextPuzzle.puzzle();
 
         if (!puzzle.getId().equals(puzzleId)) {
+
             throw new PuzzleNotFoundException(puzzleId);
+
+        }
+
+        Board board = new Board(puzzle.getBoard(), puzzle.getPlayerToMove());
+
+        if (!board.makeMove(column)) {
+
+            return new PuzzleAttemptResult(
+                    false,
+                    board.toPositionString(),
+                    "That move is not legal.",
+                    1200,
+                    1200,
+                    puzzle.getRating(),
+                    puzzle.getRating()
+            );
+
         }
 
         boolean solved = column == puzzle.getCorrectColumn();
 
         return new PuzzleAttemptResult(
                 solved,
+                board.toPositionString(),
                 column + (solved ? " is correct!" : " is incorrect."),
                 1200,
                 calculateNewRating(solved, 1200, puzzle.getRating()),

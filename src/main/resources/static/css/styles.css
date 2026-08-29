@@ -21,7 +21,11 @@ body {
     cursor: pointer;
 }
 
-.column:hover .cell.empty {
+.column:disabled {
+    cursor: default;
+}
+
+.column:not(:disabled):hover .cell.empty {
     background: #1f1f1f;
 }
 

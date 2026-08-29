@@ -2,6 +2,7 @@ package io.github.rhettlangseth.gravalignonline.puzzle.domain.dto;
 
 public record PuzzleAttemptResultDto(
         boolean solved,
+        String board,
         String message,
         int oldPlayerRating,
         int newPlayerRating,

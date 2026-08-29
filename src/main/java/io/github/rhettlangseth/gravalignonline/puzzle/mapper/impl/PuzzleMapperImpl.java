@@ -27,6 +27,7 @@ public class PuzzleMapperImpl implements PuzzleMapper {
 
         return new PuzzleAttemptResultDto(
                 puzzleAttemptResult.solved(),
+                puzzleAttemptResult.board(),
                 puzzleAttemptResult.message(),
                 puzzleAttemptResult.oldPlayerRating(),
                 puzzleAttemptResult.newPlayerRating(),

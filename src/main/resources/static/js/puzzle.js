@@ -1,19 +1,42 @@
 let currentPuzzleId = null;
+let startingBoard = null;
+let attemptInProgress = false;
 
 const board = document.querySelector("#board");
 const moveStatus = document.querySelector("#move-status");
+const tryAgainButton = document.querySelector("#try-again-button");
+const nextPuzzleButton = document.querySelector("#next-puzzle-button");
+const loadPuzzleErrorMessage = "Could not load puzzle.";
 
 async function submitAttempt(column) {
-    const response = await fetch(`/api/v1/puzzles/${currentPuzzleId}/attempts`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ column: column })
-    });
-    const result = await response.json();
+    if (attemptInProgress) {
+        return;
+    }
 
-    moveStatus.textContent = result.message;
+    attemptInProgress = true;
+    setBoardEnabled(false);
+
+    try {
+        const response = await fetch(`/api/v1/puzzles/${currentPuzzleId}/attempts`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ column: column })
+        });
+        const result = await response.json();
+
+        renderBoard(result.board);
+        moveStatus.textContent = result.message;
+
+        tryAgainButton.hidden = false;
+        nextPuzzleButton.hidden = !result.solved;
+    } catch (error) {
+        moveStatus.textContent = "Could not submit attempt. Please try again.";
+        setBoardEnabled(true);
+    } finally {
+        attemptInProgress = false;
+    }
 }
 
 function renderBoard(boardState) {
@@ -53,13 +76,45 @@ function renderBoard(boardState) {
     }
 }
 
+tryAgainButton.addEventListener("click", resetPuzzle);
+
+nextPuzzleButton.addEventListener("click", () => {
+    loadNextPuzzle().catch(() => {
+        moveStatus.textContent = loadPuzzleErrorMessage;
+    });
+});
+
+function resetPuzzle() {
+    renderBoard(startingBoard);
+    moveStatus.textContent = "Choose a column.";
+    tryAgainButton.hidden = true;
+    nextPuzzleButton.hidden = true;
+    setBoardEnabled(true);
+    attemptInProgress = false;
+}
+
 async function loadNextPuzzle() {
     const response = await fetch("/api/v1/puzzles/next");
     const puzzle = await response.json();
 
+    startingBoard = puzzle.board;
     currentPuzzleId = puzzle.puzzleId;
     renderBoard(puzzle.board);
     moveStatus.textContent = `Player ${puzzle.playerToMove} to move.`;
+    tryAgainButton.hidden = true;
+    nextPuzzleButton.hidden = true;
+    setBoardEnabled(true);
+    attemptInProgress = false;
 }
 
-loadNextPuzzle();
+function setBoardEnabled(enabled) {
+    const columns = document.querySelectorAll(".column");
+
+    columns.forEach(column => {
+        column.disabled = !enabled;
+    });
+}
+
+loadNextPuzzle().catch(() => {
+    moveStatus.textContent = loadPuzzleErrorMessage;
+});

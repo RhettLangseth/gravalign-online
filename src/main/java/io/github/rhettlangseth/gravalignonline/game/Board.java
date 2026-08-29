@@ -109,21 +109,9 @@ public class Board {
 
     }
 
-    public boolean isLegal(int column) {
+    public boolean isLegalMove(int column) {
 
-        if (column < 1 || column > 7) {
-
-            throw new IllegalArgumentException("Move column must be between 1 and 7");
-
-        }
-
-        if (heights[column - 1] == 6) {
-
-            return false;
-
-        }
-
-        return true;
+        return column > 0 && column < 8 && heights[column - 1] != 6;
 
     }
 
@@ -154,15 +142,17 @@ public class Board {
 
     }
 
-    public void makeMove(int column) {
+    public boolean makeMove(int column) {
 
-        if (!isLegal(column)) {
+        if (!isLegalMove(column)) {
 
-            throw new IllegalArgumentException("Move column must not be full");
+            return false;
 
         }
 
         makeMoveInternal(column - 1);
+
+        return true;
 
     }
 
