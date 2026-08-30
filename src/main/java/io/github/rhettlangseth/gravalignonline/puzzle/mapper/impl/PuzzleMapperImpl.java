@@ -1,5 +1,6 @@
 package io.github.rhettlangseth.gravalignonline.puzzle.mapper.impl;
 
+import io.github.rhettlangseth.gravalignonline.player.domain.entity.PlayerProfile;
 import io.github.rhettlangseth.gravalignonline.puzzle.domain.dto.NextPuzzleResponseDto;
 import io.github.rhettlangseth.gravalignonline.puzzle.domain.dto.PuzzleAttemptResultDto;
 import io.github.rhettlangseth.gravalignonline.puzzle.domain.entity.Puzzle;
@@ -39,11 +40,11 @@ public class PuzzleMapperImpl implements PuzzleMapper {
     }
 
     @Override
-    public NextPuzzle toNextPuzzle(Puzzle puzzle) {
+    public NextPuzzle toNextPuzzle(Puzzle puzzle, PlayerProfile playerProfile) {
 
         return new NextPuzzle(
                 puzzle,
-                1200
+                playerProfile.getRating()
         );
 
     }

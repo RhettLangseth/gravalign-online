@@ -1,5 +1,6 @@
 package io.github.rhettlangseth.gravalignonline.puzzle.mapper;
 
+import io.github.rhettlangseth.gravalignonline.player.domain.entity.PlayerProfile;
 import io.github.rhettlangseth.gravalignonline.puzzle.domain.dto.NextPuzzleResponseDto;
 import io.github.rhettlangseth.gravalignonline.puzzle.domain.dto.PuzzleAttemptResultDto;
 import io.github.rhettlangseth.gravalignonline.puzzle.domain.entity.Puzzle;
@@ -12,6 +13,6 @@ public interface PuzzleMapper {
 
     PuzzleAttemptResultDto toPuzzleAttemptResultDto(PuzzleAttemptResult puzzleAttemptResult);
 
-    NextPuzzle toNextPuzzle(Puzzle puzzle);
+    NextPuzzle toNextPuzzle(Puzzle puzzle, PlayerProfile playerProfile);
 
 }
