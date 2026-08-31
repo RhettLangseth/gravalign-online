@@ -4,11 +4,18 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 import java.util.UUID;
 
 @Entity
-@Table(name = "puzzle_attempts")
+@Table(
+        name = "puzzle_attempts",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_puzzle_attempt_player_profile_puzzle",
+                columnNames = {"player_profile_id", "puzzle_id"}
+        )
+)
 public class PuzzleAttempt {
 
     @Id

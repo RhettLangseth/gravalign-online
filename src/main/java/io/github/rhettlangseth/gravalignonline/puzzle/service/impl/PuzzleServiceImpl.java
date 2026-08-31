@@ -72,7 +72,7 @@ public class PuzzleServiceImpl implements PuzzleService {
     public PuzzleAttemptResult submitAttempt(UUID puzzleId, int column) {
 
         Puzzle puzzle = puzzleRepository.findById(puzzleId).orElseThrow(() -> new PuzzleNotFoundException(puzzleId));
-        PlayerProfile playerProfile = playerProfileRepository.findById(DEMO_PLAYER_ID)
+        PlayerProfile playerProfile = playerProfileRepository.findLockedById(DEMO_PLAYER_ID)
                 .orElseThrow(() -> new RuntimeException("Demo player profile not found."));
         boolean isFirstAttempt = !puzzleAttemptRepository.existsByPlayerProfileIdAndPuzzleId(
                 playerProfile.getId(),
