@@ -47,24 +47,40 @@ public class Puzzle {
 
     }
 
+    public void updateRating(int rating) {
+
+        this.rating = rating;
+
+    }
+
     public UUID getId() {
+
         return id;
+
     }
 
     public String getBoard() {
+
         return board;
+
     }
 
     public int getPlayerToMove() {
+
         return playerToMove;
+
     }
 
     public int getCorrectColumn() {
+
         return correctColumn;
+
     }
 
     public int getRating() {
+
         return rating;
+
     }
 
 }

@@ -31,6 +31,13 @@ public class PuzzleController {
     public ResponseEntity<NextPuzzleResponseDto> getNextPuzzle() {
 
         NextPuzzle nextPuzzle = puzzleService.getNextPuzzle();
+
+        if (nextPuzzle == null) {
+
+            return ResponseEntity.noContent().build();
+
+        }
+
         NextPuzzleResponseDto nextPuzzleResponseDto = puzzleMapper.toNextPuzzleResponseDto(nextPuzzle);
 
         return ResponseEntity.ok(nextPuzzleResponseDto);

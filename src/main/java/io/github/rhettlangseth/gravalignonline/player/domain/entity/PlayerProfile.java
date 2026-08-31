@@ -30,6 +30,12 @@ public class PlayerProfile {
         this.rating = rating;
     }
 
+    public void updateRating(int rating) {
+
+        this.rating = rating;
+
+    }
+
     public UUID getId() {
         return id;
     }
