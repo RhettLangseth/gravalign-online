@@ -12,6 +12,7 @@ import io.github.rhettlangseth.gravalignonline.puzzle.mapper.PuzzleMapper;
 import io.github.rhettlangseth.gravalignonline.puzzle.repository.PuzzleAttemptRepository;
 import io.github.rhettlangseth.gravalignonline.puzzle.repository.PuzzleRepository;
 import io.github.rhettlangseth.gravalignonline.puzzle.service.PuzzleService;
+import io.github.rhettlangseth.gravalignonline.rating.RatingCalculator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +23,6 @@ import java.util.UUID;
 public class PuzzleServiceImpl implements PuzzleService {
 
     private static final UUID DEMO_PLAYER_ID = UUID.fromString("00000000-0000-0000-0000-000000000101");
-    private static final int ASSUMED_RATING_GAME_COUNT = 50;
-    private static final int RATING_FLOOR = 100;
 
     private final PlayerProfileRepository playerProfileRepository;
     private final PuzzleRepository puzzleRepository;
@@ -60,39 +59,6 @@ public class PuzzleServiceImpl implements PuzzleService {
         Puzzle puzzle = puzzles.getFirst();
 
         return puzzleMapper.toNextPuzzle(puzzle, playerProfile);
-
-    }
-
-    private int calculateNewRating(boolean result, int rating, int otherRating) {
-
-        double actualScore = result ? 1.0 : 0.0;
-        double expectedScore = calculateExpectedScore(rating, otherRating);
-        double kFactor = calculateKFactor(rating);
-        int ratingChange = (int) Math.round(kFactor * (actualScore - expectedScore));
-
-        return Math.max(RATING_FLOOR, rating + ratingChange);
-
-    }
-
-    private double calculateExpectedScore(int rating, int otherRating) {
-
-        return 1.0 / (1.0 + Math.pow(10.0, (otherRating - rating) / 400.0));
-
-    }
-
-    private double calculateKFactor(int rating) {
-
-        double ratingBasedGameCap;
-
-        if (rating <= 2355) {
-            ratingBasedGameCap = 50.0 / Math.sqrt(0.662 + 0.00000739 * Math.pow(2569.0 - rating, 2.0));
-        } else {
-            ratingBasedGameCap = 50.0;
-        }
-
-        double effectiveGameCount = Math.min(ASSUMED_RATING_GAME_COUNT, ratingBasedGameCap);
-
-        return 800.0 / (effectiveGameCount + 1.0);
 
     }
 
@@ -134,8 +100,8 @@ public class PuzzleServiceImpl implements PuzzleService {
 
             int attemptNumber = (int)puzzleAttemptRepository.countByPlayerProfileId(playerProfile.getId());
 
-            newPlayerRating = calculateNewRating(solved, oldPlayerRating, oldPuzzleRating);
-            newPuzzleRating = calculateNewRating(!solved, oldPuzzleRating, oldPlayerRating);
+            newPlayerRating = RatingCalculator.calculateNewRating(solved, oldPlayerRating, oldPuzzleRating);
+            newPuzzleRating = RatingCalculator.calculateNewRating(!solved, oldPuzzleRating, oldPlayerRating);
 
             playerProfile.updateRating(newPlayerRating);
             puzzle.updateRating(newPuzzleRating);
