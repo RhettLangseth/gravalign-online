@@ -1,14 +1,20 @@
 let currentPuzzleId = null;
 let startingBoard = null;
 let attemptInProgress = false;
+let currentPlayerRating = null;
+let currentPuzzleRating = null;
 
 const board = document.querySelector("#board");
 const moveStatus = document.querySelector("#move-status");
 const tryAgainButton = document.querySelector("#try-again-button");
 const nextPuzzleButton = document.querySelector("#next-puzzle-button");
 const playerToMove = document.querySelector("#player-to-move");
+const playerRatingPanel = document.querySelector("#player-rating-panel");
+const showPuzzleRatingButton = document.querySelector("#show-puzzle-rating-button");
+const puzzleRatingDisplay = document.querySelector("#puzzle-rating-display");
 const emptyBoard = "000000000000000000000000000000000000000000";
 const loadPuzzleErrorMessage = "Could not load puzzle.";
+const ratingArrow = "\u279C";
 
 async function submitAttempt(column) {
     if (currentPuzzleId === null || attemptInProgress) {
@@ -32,6 +38,19 @@ async function submitAttempt(column) {
         setBoardEnabled(false);
         moveStatus.textContent = result.message;
 
+        const unratedText = result.rated ? "" : " (unrated)";
+
+        playerRatingPanel.textContent =
+            `Player rating: ${result.oldPlayerRating} ${ratingArrow} ${result.newPlayerRating}${unratedText}`;
+
+        showPuzzleRatingButton.hidden = true;
+        puzzleRatingDisplay.hidden = false;
+        puzzleRatingDisplay.textContent =
+            `Puzzle rating: ${result.oldPuzzleRating} ${ratingArrow} ${result.newPuzzleRating}${unratedText}`;
+
+        currentPlayerRating = result.newPlayerRating;
+        currentPuzzleRating = result.newPuzzleRating;
+
         tryAgainButton.hidden = false;
         nextPuzzleButton.hidden = false;
         playerToMove.hidden = true;
@@ -42,6 +61,12 @@ async function submitAttempt(column) {
         attemptInProgress = false;
     }
 }
+
+showPuzzleRatingButton.addEventListener("click", () => {
+    showPuzzleRatingButton.hidden = true;
+    puzzleRatingDisplay.hidden = false;
+    puzzleRatingDisplay.textContent = `Puzzle rating: ${currentPuzzleRating}`;
+});
 
 tryAgainButton.addEventListener("click", resetPuzzle);
 
@@ -54,6 +79,10 @@ nextPuzzleButton.addEventListener("click", () => {
 function resetPuzzle() {
     renderBoard(board, startingBoard, submitAttempt);
     moveStatus.textContent = "Choose a column.";
+    playerRatingPanel.textContent = `Player rating: ${currentPlayerRating}`;
+    showPuzzleRatingButton.hidden = false;
+    puzzleRatingDisplay.hidden = true;
+    puzzleRatingDisplay.textContent = "";
     tryAgainButton.hidden = true;
     nextPuzzleButton.hidden = true;
     playerToMove.hidden = false;
@@ -66,6 +95,12 @@ async function loadNextPuzzle() {
 
     if (response.status === 204) {
         currentPuzzleId = null;
+        currentPlayerRating = null;
+        currentPuzzleRating = null;
+        playerRatingPanel.textContent = "";
+        showPuzzleRatingButton.hidden = true;
+        puzzleRatingDisplay.hidden = true;
+        puzzleRatingDisplay.textContent = "";
         startingBoard = emptyBoard;
         renderBoard(board, emptyBoard, submitAttempt);
         setBoardEnabled(false);
@@ -84,6 +119,8 @@ async function loadNextPuzzle() {
 
     startingBoard = puzzle.board;
     currentPuzzleId = puzzle.puzzleId;
+    currentPlayerRating = puzzle.playerRating;
+    currentPuzzleRating = puzzle.puzzleRating;
     resetPuzzle();
 }
 

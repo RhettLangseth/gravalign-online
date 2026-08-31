@@ -6,7 +6,8 @@ public record NextPuzzleResponseDto(
         UUID puzzleId,
         String board,
         int playerToMove,
-        int playerRating
+        int playerRating,
+        int puzzleRating
 ) {
 
 }

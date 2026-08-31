@@ -19,7 +19,8 @@ public class PuzzleMapperImpl implements PuzzleMapper {
                 nextPuzzle.puzzle().getId(),
                 nextPuzzle.puzzle().getBoard(),
                 nextPuzzle.puzzle().getPlayerToMove(),
-                nextPuzzle.playerRating()
+                nextPuzzle.playerRating(),
+                nextPuzzle.puzzle().getRating()
         );
 
     }

@@ -13,22 +13,31 @@
 
         <main>
             <section>
-                <h2>Puzzle</h2>
+                <div class="puzzle-layout">
+                    <div id="puzzle-rating-panel" class="rating-panel">
+                        <button id="show-puzzle-rating-button" type="button">Show Puzzle Rating</button>
+                        <span id="puzzle-rating-display" hidden></span>
+                    </div>
 
-                <div class="board-area">
-                    <div id="board" class="board"></div>
-                </div>
+                    <div class="board-area">
+                        <div id="board" class="board"></div>
+                    </div>
 
-                <div id="player-to-move">
-                    <span>Player to move:</span>
-                    <span class="piece-marker player-one"></span>
-                </div>
+                    <div class="below-board-row">
+                        <div id="player-rating-panel" class="rating-panel"></div>
 
-                <div id="move-status">Choose a column.</div>
+                        <div id="player-to-move">
+                            <span>Player to move:</span>
+                            <span class="piece-marker player-one"></span>
+                        </div>
+                    </div>
 
-                <div id="puzzle-actions">
-                    <button id="try-again-button" type="button" hidden>Try Again</button>
-                    <button id="next-puzzle-button" type="button" hidden>Next Puzzle</button>
+                    <div id="move-status">Choose a column.</div>
+
+                    <div id="puzzle-actions">
+                        <button id="try-again-button" type="button" hidden>Try Again</button>
+                        <button id="next-puzzle-button" type="button" hidden>Next Puzzle</button>
+                    </div>
                 </div>
             </section>
         </main>
