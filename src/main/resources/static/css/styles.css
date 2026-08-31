@@ -151,16 +151,17 @@ main section {
     justify-content: flex-start;
 }
 
-#puzzle-rating-panel,
-#player-rating-panel {
-    min-width: 16.25rem;
+.below-board-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
 }
 
-.below-board-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
+#player-rating-panel {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #move-status {
@@ -210,9 +211,11 @@ button:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    justify-self: end;
     gap: 0.625rem;
     font-weight: bold;
     line-height: 1.5rem;
+    white-space: nowrap;
 }
 
 #player-to-move[hidden] {
