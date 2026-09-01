@@ -30,8 +30,10 @@ public class PuzzleMapperImpl implements PuzzleMapper {
 
         return new PuzzleAttemptResultDto(
                 puzzleAttemptResult.solved(),
+                puzzleAttemptResult.complete(),
                 puzzleAttemptResult.rated(),
                 puzzleAttemptResult.board(),
+                puzzleAttemptResult.nextMoveIndex(),
                 puzzleAttemptResult.message(),
                 puzzleAttemptResult.oldPlayerRating(),
                 puzzleAttemptResult.newPlayerRating(),

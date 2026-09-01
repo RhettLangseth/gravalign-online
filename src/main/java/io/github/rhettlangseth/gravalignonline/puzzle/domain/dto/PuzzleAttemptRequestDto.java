@@ -8,7 +8,11 @@ public record PuzzleAttemptRequestDto(
         @NotNull
         @Min(1)
         @Max(7)
-        Integer column
+        Integer column,
+
+        @NotNull
+        @Min(0)
+        Integer moveIndex
 ) {
 
 }

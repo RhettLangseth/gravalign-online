@@ -21,8 +21,8 @@ public class Puzzle {
     @Column(name = "player_to_move", nullable = false)
     private int playerToMove;
 
-    @Column(name = "correct_column", nullable = false)
-    private int correctColumn;
+    @Column(name = "solution_columns", nullable = false)
+    private String solutionColumns;
 
     @Column(name = "rating", nullable = false)
     private int rating;
@@ -35,14 +35,14 @@ public class Puzzle {
             UUID id,
             String board,
             int playerToMove,
-            int correctColumn,
+            String solutionColumns,
             int rating
     ) {
 
         this.id = id;
         this.board = board;
         this.playerToMove = playerToMove;
-        this.correctColumn = correctColumn;
+        this.solutionColumns = solutionColumns;
         this.rating = rating;
 
     }
@@ -71,9 +71,9 @@ public class Puzzle {
 
     }
 
-    public int getCorrectColumn() {
+    public String getSolutionColumns() {
 
-        return correctColumn;
+        return solutionColumns;
 
     }
 

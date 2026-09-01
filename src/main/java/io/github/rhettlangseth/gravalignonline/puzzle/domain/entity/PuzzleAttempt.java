@@ -1,10 +1,6 @@
 package io.github.rhettlangseth.gravalignonline.puzzle.domain.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 
 import java.util.UUID;
 
@@ -28,17 +24,21 @@ public class PuzzleAttempt {
     @Column(name = "puzzle_id", nullable = false, updatable = false)
     private UUID puzzleId;
 
-    @Column(name = "solved", nullable = false, updatable = false)
-    private boolean solved;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private PuzzleAttemptStatus status;
+
+    @Column(name = "next_move_index", nullable = false)
+    private int nextMoveIndex;
 
     @Column(name = "attempt_number", nullable = false, updatable = false)
     private int attemptNumber;
 
-    @Column(name = "new_player_rating", nullable = false, updatable = false)
-    private int newPlayerRating;
+    @Column(name = "new_player_rating")
+    private Integer newPlayerRating;
 
-    @Column(name = "new_puzzle_rating", nullable = false, updatable = false)
-    private int newPuzzleRating;
+    @Column(name = "new_puzzle_rating")
+    private Integer newPuzzleRating;
 
     protected PuzzleAttempt() {
 
@@ -48,17 +48,41 @@ public class PuzzleAttempt {
             UUID id,
             UUID playerProfileId,
             UUID puzzleId,
-            boolean solved,
+            PuzzleAttemptStatus status,
+            int nextMoveIndex,
             int attemptNumber,
-            int newPlayerRating,
-            int newPuzzleRating
+            Integer newPlayerRating,
+            Integer newPuzzleRating
     ) {
 
         this.id = id;
         this.playerProfileId = playerProfileId;
         this.puzzleId = puzzleId;
-        this.solved = solved;
+        this.status = status;
+        this.nextMoveIndex = nextMoveIndex;
         this.attemptNumber = attemptNumber;
+        this.newPlayerRating = newPlayerRating;
+        this.newPuzzleRating = newPuzzleRating;
+
+    }
+
+    public void advanceToMoveIndex(int nextMoveIndex) {
+
+        this.nextMoveIndex = nextMoveIndex;
+
+    }
+
+    public void markSolved(int newPlayerRating, int newPuzzleRating) {
+
+        this.status = PuzzleAttemptStatus.SOLVED;
+        this.newPlayerRating = newPlayerRating;
+        this.newPuzzleRating = newPuzzleRating;
+
+    }
+
+    public void markFailed(int newPlayerRating, int newPuzzleRating) {
+
+        this.status = PuzzleAttemptStatus.FAILED;
         this.newPlayerRating = newPlayerRating;
         this.newPuzzleRating = newPuzzleRating;
 
@@ -82,9 +106,21 @@ public class PuzzleAttempt {
 
     }
 
+    public PuzzleAttemptStatus getStatus() {
+
+        return status;
+
+    }
+
     public boolean isSolved() {
 
-        return solved;
+        return status == PuzzleAttemptStatus.SOLVED;
+
+    }
+
+    public int getNextMoveIndex() {
+
+        return nextMoveIndex;
 
     }
 
@@ -94,13 +130,13 @@ public class PuzzleAttempt {
 
     }
 
-    public int getNewPlayerRating() {
+    public Integer getNewPlayerRating() {
 
         return newPlayerRating;
 
     }
 
-    public int getNewPuzzleRating() {
+    public Integer getNewPuzzleRating() {
 
         return newPuzzleRating;
 

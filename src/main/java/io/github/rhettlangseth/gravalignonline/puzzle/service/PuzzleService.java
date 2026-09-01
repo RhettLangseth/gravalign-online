@@ -9,6 +9,6 @@ public interface PuzzleService {
 
     NextPuzzle getNextPuzzle();
 
-    PuzzleAttemptResult submitAttempt(UUID puzzleId, int column);
+    PuzzleAttemptResult submitAttempt(UUID puzzleId, int column, int moveIndex);
 
 }

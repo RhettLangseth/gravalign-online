@@ -50,7 +50,11 @@ public class PuzzleController {
             @Valid @RequestBody PuzzleAttemptRequestDto puzzleAttemptRequestDto
     ) {
 
-        PuzzleAttemptResult puzzleAttemptResult = puzzleService.submitAttempt(puzzleId, puzzleAttemptRequestDto.column());
+        PuzzleAttemptResult puzzleAttemptResult = puzzleService.submitAttempt(
+                puzzleId,
+                puzzleAttemptRequestDto.column(),
+                puzzleAttemptRequestDto.moveIndex()
+        );
         PuzzleAttemptResultDto puzzleAttemptResultDto = puzzleMapper.toPuzzleAttemptResultDto(puzzleAttemptResult);
 
         return ResponseEntity.ok(puzzleAttemptResultDto);

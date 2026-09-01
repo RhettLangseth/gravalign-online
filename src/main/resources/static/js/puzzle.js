@@ -3,6 +3,7 @@ let startingBoard = null;
 let attemptInProgress = false;
 let currentPlayerRating = null;
 let currentPuzzleRating = null;
+let currentMoveIndex = 0;
 
 const board = document.querySelector("#board");
 const moveStatus = document.querySelector("#move-status");
@@ -30,30 +31,39 @@ async function submitAttempt(column) {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ column: column })
+            body: JSON.stringify({
+                column: column,
+                moveIndex: currentMoveIndex
+            })
         });
         const result = await response.json();
 
+        currentMoveIndex = result.nextMoveIndex;
         renderBoard(board, result.board, submitAttempt);
-        setBoardEnabled(false);
         moveStatus.textContent = result.message;
 
-        const unratedText = result.rated ? "" : " (unrated)";
+        if (result.complete) {
+            setBoardEnabled(false);
 
-        playerRatingPanel.textContent =
-            `Player rating: ${result.oldPlayerRating} ${ratingArrow} ${result.newPlayerRating}${unratedText}`;
+            const unratedText = result.rated ? "" : " (unrated)";
 
-        showPuzzleRatingButton.hidden = true;
-        puzzleRatingDisplay.hidden = false;
-        puzzleRatingDisplay.textContent =
-            `Puzzle rating: ${result.oldPuzzleRating} ${ratingArrow} ${result.newPuzzleRating}${unratedText}`;
+            playerRatingPanel.textContent =
+                `Player rating: ${result.oldPlayerRating} ${ratingArrow} ${result.newPlayerRating}${unratedText}`;
 
-        currentPlayerRating = result.newPlayerRating;
-        currentPuzzleRating = result.newPuzzleRating;
+            showPuzzleRatingButton.hidden = true;
+            puzzleRatingDisplay.hidden = false;
+            puzzleRatingDisplay.textContent =
+                `Puzzle rating: ${result.oldPuzzleRating} ${ratingArrow} ${result.newPuzzleRating}${unratedText}`;
 
-        tryAgainButton.hidden = false;
-        nextPuzzleButton.hidden = false;
-        playerToMove.hidden = true;
+            currentPlayerRating = result.newPlayerRating;
+            currentPuzzleRating = result.newPuzzleRating;
+
+            tryAgainButton.hidden = false;
+            nextPuzzleButton.hidden = false;
+            playerToMove.hidden = true;
+        } else {
+            setBoardEnabled(true);
+        }
     } catch (error) {
         moveStatus.textContent = "Could not submit attempt. Please try again.";
         setBoardEnabled(true);
@@ -77,6 +87,7 @@ nextPuzzleButton.addEventListener("click", () => {
 });
 
 function resetPuzzle() {
+    currentMoveIndex = 0;
     renderBoard(board, startingBoard, submitAttempt);
     moveStatus.textContent = "Choose a column.";
     playerRatingPanel.textContent = `Player rating: ${currentPlayerRating}`;
